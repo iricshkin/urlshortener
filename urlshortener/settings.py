@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -86,12 +90,14 @@ DATABASES = {
 if os.environ.get('POSTGRES_NAME'):
     DATABASES = {
         'default': {
-            'ENGINE': os.environ.get('DB_ENGINE'),
-            'NAME': os.environ.get('POSTGRES_NAME'),
-            'USER': os.environ.get('POSTGRES_USER'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-            'HOST': 'db',
-            'PORT': 5432,
+            'ENGINE': os.getenv(
+                'DB_ENGINE', default='django.db.backends.postgresql'
+            ),
+            'NAME': os.getenv('POSTGRES_NAME', default='password'),
+            'USER': os.getenv('POSTGRES_USER', default='password'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='password'),
+            'HOST': os.getenv('DB_HOST', default='db'),
+            'PORT': os.getenv('DB_PORT', default='5432'),
         }
     }
 
